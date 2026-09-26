@@ -5,11 +5,11 @@ import { generateSessionQuestions } from '../utils/shuffle.js';
 import questionBank from '../data/questionBank.js';
 
 const JOURNEY = [
-  { num: '01', icon: '🔍', label: 'Wonder',   desc: 'Spark your curiosity' },
-  { num: '02', icon: '📖', label: 'Story',    desc: "Farhan & Mei Lin's trail" },
-  { num: '03', icon: '🧪', label: 'Simulate', desc: '4 interactive labs' },
-  { num: '04', icon: '🎮', label: 'Practice', desc: '10 worlds & bosses' },
-  { num: '05', icon: '📓', label: 'Reflect',  desc: 'Review & scorecard' },
+  { num: '01', icon: '🔍', label: 'Wonder',   desc: 'Pattern puzzle' },
+  { num: '02', icon: '📖', label: 'Story',    desc: "Alpine expedition" },
+  { num: '03', icon: '✏️', label: 'Simulate', desc: '4 engineering labs' },
+  { num: '04', icon: '🎮', label: 'Practice', desc: '10 themed worlds' },
+  { num: '05', icon: '📓', label: 'Reflect',  desc: 'Trophy & scorecard' },
 ];
 
 export default function IntroScreen({ state, dispatch }) {
@@ -28,102 +28,79 @@ export default function IntroScreen({ state, dispatch }) {
     <div className="intro-wrap">
       {/* Top Badge */}
       <div className="intro-top-badge">
-        ✨ Curriculum · Number Patterns &amp; Sequences · Secondary 1
+        ✨ Curriculum · Number Patterns &amp; Sequences · Grade 7 / Secondary 1
       </div>
 
       {/* Main Title */}
       <h1 className="intro-title">
         <span className="text-orange">Pattern</span> <span className="text-white">Quest</span>
       </h1>
-      <h2 className="intro-subtitle">PatternQuest · Master Number Patterns, Rules &amp; the General Term</h2>
+      <h2 className="intro-subtitle">Master Linear Patterns, Common Differences &amp; the General Term</h2>
 
       {/* Mascot Row */}
       <div className="intro-mascot-row">
         <div className="intro-mascot-circle">🦉</div>
         <div className="intro-speech-bubble">
-          Hoo-hoo! I'm Tally. Ready to trek the trail,<br />crack the rule, and find the formula? 🧭🗺️
+          Hoo-hoo! I'm Chief Engineer Tally. Ready to bridge the gorge, calibrate the hydro turbines, and find the general term? 🧭🗺️
         </div>
       </div>
 
       {/* Description */}
       <p className="intro-desc">
-        Learn to continue number patterns, describe rules in words, recognise special sequences, and derive the general term (nth term) of a linear sequence — like a true expedition scout!
+        Investigate growing figure patterns, discover the common difference, master the zero-term offset, and derive the algebraic general term ($T_n = dn + c$) to conquer real-world expedition challenges!
       </p>
 
-      {/* Journey Card */}
+      {/* Journey Card (Single Sleek Row) */}
       <div className="journey-card">
-        <div className="journey-card-title">YOUR LEARNING JOURNEY · CLICK ANY PHASE TO START</div>
+        <div className="journey-card-title">YOUR LEARNING EXPEDITION · CLICK ANY PHASE TO JUMP IN</div>
 
         <div className="journey-steps-container">
-          <div className="journey-row top-row">
-            {JOURNEY.slice(0, 3).map((j, i) => (
-              <React.Fragment key={j.num}>
-                <div
-                  className="journey-step-item clickable-step"
-                  onClick={() => dispatch({ type: 'SET_PHASE', payload: j.label.toLowerCase() === 'practice' ? 'play' : j.label.toLowerCase() })}
-                  role="button"
-                  tabIndex={0}
-                  title={`Click to open ${j.label} phase`}
-                >
-                  <span className="journey-icon-circle">{j.icon}</span>
-                  <div className="journey-text-col">
-                    <span className="journey-item-title">{j.label}</span>
-                    <span className="journey-item-desc">{j.desc}</span>
-                  </div>
+          {JOURNEY.map((j, i) => (
+            <React.Fragment key={j.num}>
+              <div
+                className="journey-step-item clickable-step"
+                onClick={() => dispatch({ type: 'SET_PHASE', payload: j.label.toLowerCase() === 'practice' ? 'play' : j.label.toLowerCase() })}
+                role="button"
+                tabIndex={0}
+                title={`Click to open ${j.label} phase`}
+              >
+                <span className="journey-icon-circle">{j.icon}</span>
+                <div className="journey-text-col">
+                  <span className="journey-item-title">{j.label}</span>
+                  <span className="journey-item-desc">{j.desc}</span>
                 </div>
-                <span className={`journey-arrow ${i === 2 ? 'fade-arrow' : ''}`}>→</span>
-              </React.Fragment>
-            ))}
-          </div>
-
-          <div className="journey-row bottom-row">
-            {JOURNEY.slice(3, 5).map((j, i) => (
-              <React.Fragment key={j.num}>
-                <div
-                  className="journey-step-item clickable-step"
-                  onClick={() => dispatch({ type: 'SET_PHASE', payload: j.label.toLowerCase() === 'practice' ? 'play' : j.label.toLowerCase() })}
-                  role="button"
-                  tabIndex={0}
-                  title={`Click to open ${j.label} phase`}
-                >
-                  <span className="journey-icon-circle">{j.icon}</span>
-                  <div className="journey-text-col">
-                    <span className="journey-item-title">{j.label}</span>
-                    <span className="journey-item-desc">{j.desc}</span>
-                  </div>
-                </div>
-                {i === 0 && <span className="journey-arrow">→</span>}
-              </React.Fragment>
-            ))}
-          </div>
+              </div>
+              {i < JOURNEY.length - 1 && <span className="journey-arrow">→</span>}
+            </React.Fragment>
+          ))}
         </div>
       </div>
 
-      {/* Actions */}
+      {/* Primary Actions */}
       <div className="intro-ctas">
-        <button className="btn btn-primary btn-lg intro-cta-main" onClick={startFresh}>
+        <button className="btn-primary intro-cta-main" onClick={startFresh}>
           🚀 Begin Your Expedition!
         </button>
         {hasSaved && (
-          <button className="btn btn-outline" onClick={resumeSession} style={{ marginTop: '10px' }}>
+          <button className="btn-outline intro-cta-resume" onClick={resumeSession}>
             ↩ Resume Session
           </button>
         )}
       </div>
 
-      {/* Bottom Cards */}
+      {/* Bottom Feature Badges */}
       <div className="intro-bottom-cards">
         <div className="bottom-card">
-          <div className="bottom-card-icon" style={{ color: '#ff6b6b' }}>🎯</div>
-          <div>100 Questions</div>
+          <span className="bottom-card-icon">🎯</span>
+          <span>100 Quest Challenges</span>
         </div>
         <div className="bottom-card">
-          <div className="bottom-card-icon" style={{ color: '#feca57' }}>🗺️</div>
-          <div>Rules &amp; Formulas</div>
+          <span className="bottom-card-icon">🌉</span>
+          <span>4 Engineering Simulations</span>
         </div>
         <div className="bottom-card">
-          <div className="bottom-card-icon" style={{ color: '#66bb6a' }}>✨</div>
-          <div>Badges &amp; XP</div>
+          <span className="bottom-card-icon">👑</span>
+          <span>10 World Boss Battles</span>
         </div>
       </div>
     </div>
