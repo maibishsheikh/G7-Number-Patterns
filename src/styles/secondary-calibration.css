@@ -1,0 +1,20 @@
+/* src/styles/secondary-calibration.css
+   ────────────────────────────────────────────────────────────────────────
+   Scoped override sheet — NOT a rewrite of the inherited component CSS.
+   The reference architecture (numberbound.vercel.app) was built for
+   Primary-grade learners and leans on large, bouncy emoji iconography.
+   PRD §12 calls for PatternQuest (Secondary 1, ages 12–13) to sit toward
+   the platform's more restrained end: same design system and tokens,
+   modestly smaller decorative emoji so it doesn't read as a younger-grade
+   product. This file only dials back the handful of oversized decorative
+   icon sizes identified in the inherited CSS — it does not touch layout,
+   color, spacing, or the 44px+ accessible touch-target minimums, which
+   stay as inherited. Loaded last (see main.jsx) so it wins the cascade.
+   ──────────────────────────────────────────────────────────────────────── */
+
+.trophy-icon        { font-size: 3.2rem !important; }
+.fallback-emoji      { font-size: 2.8rem !important; }
+.play-done-icon      { font-size: 2.6rem !important; }
+.boss-emoji          { font-size: 2.2rem !important; }
+.feedback-icon-circle{ font-size: 2rem !important; }
+.mascot-lg .mascot-avatar-circle { font-size: 1.9rem !important; }

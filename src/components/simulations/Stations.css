@@ -1,0 +1,474 @@
+/* src/components/simulations/Stations.css */
+
+/* ─── Shared Station Shell ───────────────────────────────────────────────── */
+.station-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+}
+
+.station-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.station-title {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.station-target-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(12, 10, 32, 0.85);
+  border: 2px solid rgba(255, 193, 7, 0.55);
+  border-radius: 12px;
+  padding: 5px 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+.station-target-label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.station-target-num {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  font-weight: 900;
+  color: var(--gold);
+}
+
+.station-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.station-col-left,
+.station-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ─── Generic Stepper Control (Stations A & B) ──────────────────────────── */
+.stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stepper-btn {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  background: rgba(255, 193, 7, 0.18);
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  font-size: 1.3rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast, 0.18s ease);
+  flex-shrink: 0;
+}
+
+.stepper-btn:hover:not(:disabled) {
+  background: rgba(255, 193, 7, 0.35);
+  transform: translateY(-1px);
+}
+
+.stepper-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.stepper-value {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  font-weight: 900;
+  color: #ffffff;
+  min-width: 46px;
+  text-align: center;
+}
+
+.stepper-label {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+/* ─── Station A: Growing Trail — marker strip & stage readout ──────────── */
+.trail-marker-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: flex-end;
+  background: rgba(10, 8, 30, 0.75);
+  border: 2px dashed rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  padding: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.trail-marker-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.trail-marker-post {
+  min-width: 46px;
+  padding: 7px 10px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+}
+
+.trail-marker-post.current {
+  background: rgba(255, 193, 7, 0.28);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.4);
+}
+
+.trail-marker-pos {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+}
+
+.trail-difference-readout {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--green);
+  text-align: center;
+}
+
+/* ─── Station B: Formula Tuner ──────────────────────────────────────────── */
+.formula-tuner-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(15, 12, 38, 0.9);
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid rgba(124, 92, 191, 0.55);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tuner-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tuner-preview {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.15rem, 1.5vw, 1.5rem);
+  text-align: center;
+  color: #ffffff;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tuner-preview .coeff { color: var(--green); }
+.tuner-preview .const { color: var(--purple-light); }
+
+/* ─── Station C: Expedition Log table ───────────────────────────────────── */
+.log-table {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.log-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+  background: rgba(30, 25, 70, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.log-cell {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #ffffff;
+}
+
+.log-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.log-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.log-input.correct-input {
+  border-color: var(--green);
+  background: rgba(76, 175, 80, 0.18);
+}
+
+.log-input.wrong-input {
+  border-color: var(--red);
+  background: rgba(239, 83, 80, 0.18);
+}
+
+/* ─── Station D: Spot the False Marker ──────────────────────────────────── */
+.spot-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.spot-step-card {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-fast, 0.18s ease);
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  background: rgba(30, 25, 70, 0.85);
+  color: #ffffff;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.spot-step-card:hover:not(.selected-error) {
+  border-color: #fbbf24;
+  transform: translateY(-1px);
+  background: rgba(251, 191, 36, 0.2);
+}
+
+.spot-step-card.selected-error {
+  background: rgba(34, 197, 94, 0.35);
+  border-color: #4ade80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.45);
+}
+
+.spot-step-card.selected-correct-step {
+  border-color: #f87171;
+  background: rgba(239, 68, 68, 0.35);
+}
+
+/* ─── Running readout bar (reused across stations) ──────────────────────── */
+.running-ratio-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(12, 10, 32, 0.9);
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.running-ratio-text {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.15vw, 1.18rem);
+  font-weight: 900;
+  color: #fcd34d;
+  line-height: 1.3;
+}
+
+.running-ratio-text.exact {
+  color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+}
+
+.running-ratio-text.over {
+  color: #f87171;
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.6);
+}
+
+/* ─── Guide / Help Cards ────────────────────────────────────────────────── */
+.station-guide-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 8px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.station-guide-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
+  color: #f8fafc;
+  line-height: 1.45;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ─── Success / Completion Panel ────────────────────────────────────────── */
+.station-success {
+  background: rgba(18, 16, 52, 0.96);
+  border: 2px solid rgba(34, 197, 94, 0.7);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.station-success .success-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.station-success-msg {
+  font-family: var(--font-body);
+  font-size: clamp(0.92rem, 1.08vw, 1.08rem);
+  color: #ffffff;
+  line-height: 1.35;
+  font-weight: 800;
+  margin: 0;
+}
+
+.station-success-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.station-success-actions button {
+  padding: 6px 16px;
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  font-weight: 800;
+  min-height: 38px;
+  flex: 1 1 auto;
+}
+
+/* ─── Station Action Buttons Row ────────────────────────────────────────── */
+.station-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: auto;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.station-actions button {
+  padding: 6px 14px;
+  min-height: 38px;
+  flex: 1 1 auto;
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  font-weight: 800;
+  border-radius: 12px;
+}
+
+/* ─── Responsive Media Queries ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .station-wrap {
+    padding: 4px 6px;
+    gap: 4px;
+  }
+  .station-grid-2col {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    overflow-y: auto;
+  }
+  .station-actions button,
+  .station-success-actions button {
+    min-height: 34px;
+    padding: 4px 10px;
+    font-size: 0.86rem;
+  }
+  .log-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}

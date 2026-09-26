@@ -1,0 +1,33 @@
+{
+  "name": "patternquest",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "generate-audio": "node scripts/generate_audio.js",
+    "clean-audio": "node scripts/clean_audio.js",
+    "stress-test": "node scripts/stress_test_questions.js",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^12.42.0",
+    "lucide-react": "^1.22.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "autoprefixer": "^10.5.2",
+    "dotenv": "^17.4.2",
+    "node-fetch": "^3.3.2",
+    "oxlint": "^1.69.0",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^3.4.4",
+    "vite": "^8.1.0"
+  }
+}
