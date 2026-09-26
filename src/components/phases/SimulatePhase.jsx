@@ -9,10 +9,10 @@ import { useAudio } from '../../hooks/useAudio.js';
 import { simStationIntro } from '../../utils/narration.js';
 
 const STATIONS = [
-  { id: 0, label: 'A', name: 'The Growing Trail',        icon: '🧭', desc: 'Discover the common difference' },
-  { id: 1, label: 'B', name: 'Set the Checkpoint',        icon: '🎯', desc: 'Tune a formula to hit a target' },
-  { id: 2, label: 'C', name: 'Build the Expedition Log',  icon: '📓', desc: 'Table → general term → far stage' },
-  { id: 3, label: 'D', name: 'Spot the False Marker',     icon: '🔎', desc: 'Find and fix the wrong line' },
+  { id: 0, label: 'A', name: 'Gorge Suspension Bridge',  icon: '🌉', desc: 'Civil engineering strut expansion & common difference' },
+  { id: 1, label: 'B', name: 'Hydro-Pressure Governor',   icon: '💧', desc: 'Penstock valve calibration & zero-term offset' },
+  { id: 2, label: 'C', name: 'Solar Power Matrix',        icon: '☀️', desc: 'Engineering ledger table, formula & blizzard forecast' },
+  { id: 3, label: 'D', name: 'Summit Radar Distress Lock', icon: '📡', desc: 'Sequence membership testing & telemetry error audit' },
 ];
 
 export default function SimulatePhase({ state, dispatch }) {

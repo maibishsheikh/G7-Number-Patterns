@@ -1,474 +1,1265 @@
 /* src/components/simulations/Stations.css */
 
-/* ─── Shared Station Shell ───────────────────────────────────────────────── */
-.station-wrap {
+/* ─── Global Station Container ────────────────────────────────────────────── */
+.station-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 14px;
   width: 100%;
-  height: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
   box-sizing: border-box;
-  padding: 6px 8px;
+  animation: fadeIn 0.3s ease;
 }
 
-.station-header {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+.station-top-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 16px;
+  background: rgba(15, 20, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 12px 18px;
+  backdrop-filter: blur(12px);
   flex-wrap: wrap;
-  flex-shrink: 0;
 }
 
-.station-title {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
+.station-badge-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.station-pill-label {
+  font-size: 0.72rem;
   font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #38bdf8;
+  text-transform: uppercase;
+}
+
+.station-headline {
+  font-size: 1.25rem;
+  font-weight: 900;
   color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.station-subtext {
+  font-size: 0.85rem;
+  color: #94a3b8;
   margin: 0;
 }
 
-.station-target-box {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(12, 10, 32, 0.85);
-  border: 2px solid rgba(255, 193, 7, 0.55);
-  border-radius: 12px;
-  padding: 5px 12px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
-}
-
-.station-target-label {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.station-target-num {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.2vw, 1.15rem);
-  font-weight: 900;
-  color: var(--gold);
-}
-
-.station-grid-2col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  flex: 1;
-  min-height: 0;
-}
-
-.station-col-left,
-.station-col-right {
+.station-metric-pill {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-height: 0;
-  min-width: 0;
+  align-items: flex-end;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 6px 14px;
 }
 
-/* ─── Generic Stepper Control (Stations A & B) ──────────────────────────── */
-.stepper-row {
+.station-metric-pill.warning-pill {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.metric-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.metric-val {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #38bdf8;
+}
+
+.warning-pill .metric-val {
+  color: #f59e0b;
+}
+
+/* ─── STATION A: BRIDGE SIMULATION ────────────────────────────────────────── */
+.bridge-sim-viewport {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
-  padding: 8px 12px;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(11, 15, 33, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.gorge-visualizer {
+  position: relative;
   width: 100%;
+  height: 160px;
+  background: linear-gradient(180deg, #091322 0%, #0d2238 65%, #05141e 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.cliff-left, .cliff-right {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  padding: 6px 4px;
   box-sizing: border-box;
 }
 
-.stepper-btn {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  border-radius: 10px;
-  background: rgba(255, 193, 7, 0.18);
-  border: 1.5px solid var(--gold);
-  color: var(--gold);
-  font-size: 1.3rem;
+.cliff-left { left: 0; border-right: 2px solid #334155; }
+.cliff-right { right: 0; border-left: 2px solid #334155; }
+
+.cliff-marker {
+  font-size: 0.55rem;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.chasm-river {
+  position: absolute;
+  bottom: 0;
+  left: 50px;
+  right: 50px;
+  height: 35px;
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.3) 0%, rgba(14, 116, 144, 0.7) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px dashed rgba(6, 182, 212, 0.4);
+}
+
+.river-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #a5f3fc;
+}
+
+.bridge-svg-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.bridge-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.truss-new-anim {
+  animation: pulseNewBay 1.2s infinite alternate;
+}
+
+@keyframes pulseNewBay {
+  from { filter: drop-shadow(0 0 3px #10e5a5); }
+  to { filter: drop-shadow(0 0 8px #10e5a5); }
+}
+
+.expedition-train-crossing {
+  animation: trainCross 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes trainCross {
+  from { transform: translateX(-150px); }
+  to { transform: translateX(550px); }
+}
+
+/* Bridge Telemetry Panel */
+.bridge-telemetry-panel {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 2fr;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.telemetry-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.telemetry-lbl {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.telemetry-val-highlight {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #10e5a5;
+}
+
+.telemetry-sub {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.stepper-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 1.1rem;
   font-weight: 900;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast, 0.18s ease);
-  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.stepper-btn:hover:not(:disabled) {
-  background: rgba(255, 193, 7, 0.35);
-  transform: translateY(-1px);
+.step-circle-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.3);
+  border-color: #38bdf8;
+  transform: scale(1.08);
 }
 
-.stepper-btn:disabled {
-  opacity: 0.35;
+.step-circle-btn:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-.stepper-value {
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+.stepper-val-big {
+  font-size: 1.25rem;
   font-weight: 900;
   color: #ffffff;
-  min-width: 46px;
+  min-width: 24px;
   text-align: center;
 }
 
-.stepper-label {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.65);
-  text-align: center;
-}
-
-/* ─── Station A: Growing Trail — marker strip & stage readout ──────────── */
-.trail-marker-strip {
+.sequence-chips-row {
   display: flex;
+  gap: 6px;
   flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  align-items: flex-end;
-  background: rgba(10, 8, 30, 0.75);
-  border: 2px dashed rgba(255, 255, 255, 0.28);
-  border-radius: 12px;
-  padding: 10px;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+  align-items: center;
 }
 
-.trail-marker-chip {
+.seq-chip {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 4px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  transition: all 0.2s ease;
 }
 
-.trail-marker-post {
-  min-width: 46px;
-  padding: 7px 10px;
-  text-align: center;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1.05rem;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  border-radius: 10px;
+.seq-chip.active {
+  border-color: #10e5a5;
+  background: rgba(16, 229, 165, 0.15);
+  box-shadow: 0 0 10px rgba(16, 229, 165, 0.25);
 }
 
-.trail-marker-post.current {
-  background: rgba(255, 193, 7, 0.28);
-  border-color: var(--gold);
-  color: var(--gold);
-  box-shadow: 0 0 12px rgba(255, 193, 7, 0.4);
-}
-
-.trail-marker-pos {
-  font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.55);
+.seq-chip-n {
+  font-size: 0.65rem;
+  color: #94a3b8;
   font-weight: 700;
 }
 
-.trail-difference-readout {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: var(--green);
-  text-align: center;
+.seq-chip-val {
+  font-size: 0.88rem;
+  color: #ffffff;
+  font-weight: 900;
 }
 
-/* ─── Station B: Formula Tuner ──────────────────────────────────────────── */
-.formula-tuner-box {
+/* ─── STATION B: HYDRO PRESSURE SIMULATION ────────────────────────────────── */
+.hydro-sim-viewport {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 14px;
+  background: rgba(11, 15, 33, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.aqueduct-pipe-schematic {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: rgba(15, 12, 38, 0.9);
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 14px;
   padding: 12px;
-  border-radius: 12px;
-  border: 2px solid rgba(124, 92, 191, 0.55);
-  width: 100%;
-  box-sizing: border-box;
+  border: 1px solid rgba(6, 182, 212, 0.2);
 }
 
-.tuner-line {
+.reservoir-dam {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #06b6d4;
+}
+
+.dam-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #a5f3fc;
+}
+
+.stepped-pipe-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.pipe-checkpoint-node {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.25s ease;
+}
+
+.pipe-checkpoint-node.sensor-warning {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
+.pipe-checkpoint-node.sensor-nominal {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.gauge-dial {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  position: relative;
+  background: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.gauge-needle {
+  width: 2px;
+  height: 12px;
+  background: #f59e0b;
+  position: absolute;
+  bottom: 14px;
+  transform-origin: bottom center;
+  transition: transform 0.3s ease;
+  border-radius: 1px;
+}
+
+.sensor-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sensor-stn {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.sensor-psi {
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.formula-predicted-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.tag-error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.tag-ok {
+  background: rgba(16, 229, 165, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 229, 165, 0.4);
+}
+
+.turbine-station {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.turbine-wheel svg {
+  display: block;
+}
+
+.turbine-active .turbine-wheel svg {
+  animation: spinTurbine 1s linear infinite;
+}
+
+@keyframes spinTurbine {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.turbine-status-lbl {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.turbine-active .turbine-status-lbl {
+  color: #f59e0b;
+}
+
+/* Oscilloscope */
+.hydro-oscilloscope {
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.osc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.osc-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.04em;
+}
+
+.osc-formula {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.osc-graph-svg {
+  width: 100%;
+  height: 110px;
+}
+
+/* ─── STATION C: SOLAR MATRIX EXPEDITION ─────────────────────────────────── */
+.solar-matrix-viewport {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 14px;
+  background: rgba(11, 15, 33, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.basecamp-blueprint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.blueprint-svg {
+  width: 100%;
+  max-width: 260px;
+  height: 180px;
+}
+
+.tier-ring-pulse {
+  animation: ringPulse 1.4s infinite alternate;
+}
+
+@keyframes ringPulse {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+.shield-active {
+  animation: shieldPulse 1s infinite alternate;
+}
+
+@keyframes shieldPulse {
+  from { filter: drop-shadow(0 0 4px #10e5a5); }
+  to { filter: drop-shadow(0 0 12px #10e5a5); }
+}
+
+.tier-selector-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tier-sel-lbl {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.tier-chip-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tier-chip-btn.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+/* Ledger Box */
+.expedition-ledger-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ledger-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ledger-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.04em;
+}
+
+.ledger-delta-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #10e5a5;
+  background: rgba(16, 229, 165, 0.12);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 229, 165, 0.3);
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.ledger-table th {
+  text-align: left;
+  padding: 6px 8px;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ledger-table td {
+  padding: 6px 8px;
+  color: #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.active-target-row {
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.unit-highlight {
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.unit-highlight.correct {
+  color: #10e5a5;
+}
+
+.delta-badge {
+  color: #10e5a5;
+  font-weight: 800;
+}
+
+.base-badge {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.table-input-cell {
+  width: 60px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid #38bdf8;
+  border-radius: 6px;
+  color: #ffffff;
+  font-weight: 800;
+  padding: 4px 6px;
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.table-action-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* ─── STATION D: RADAR SIMULATION ────────────────────────────────────────── */
+.radar-sim-viewport {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 14px;
+  background: rgba(11, 15, 33, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.radar-screen-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 20, 16, 0.8);
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(16, 229, 165, 0.25);
+  box-shadow: inset 0 0 20px rgba(16, 229, 165, 0.15);
+}
+
+.radar-svg {
+  width: 100%;
+  max-width: 210px;
+  height: 200px;
+  overflow: visible;
+}
+
+.radar-rotating-beam {
+  transform-origin: 100px 100px;
+  animation: sweepRotate 4s linear infinite;
+}
+
+@keyframes sweepRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.radar-blip-group {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.radar-blip-group:hover {
+  transform: scale(1.15);
+}
+
+.blip-pulse {
+  animation: blipFade 1.6s infinite alternate;
+}
+
+@keyframes blipFade {
+  from { opacity: 0.6; }
+  to { opacity: 1; filter: drop-shadow(0 0 4px #10e5a5); }
+}
+
+/* Telemetry Log Console */
+.radar-telemetry-console {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.75);
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.console-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.console-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.console-formula-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.console-prompt {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.log-entries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.82rem;
+}
+
+.log-row-item:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.log-row-item.row-corrupted {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.log-row-item.row-nominal {
+  border-color: #10e5a5;
+  background: rgba(16, 229, 165, 0.1);
+}
+
+.log-row-item.row-repaired {
+  border-color: #10e5a5;
+  background: rgba(16, 229, 165, 0.15);
+}
+
+.repaired-freq {
+  color: #10e5a5;
+}
+
+.repair-input-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 4px;
+}
+
+.repair-lbl {
+  font-size: 0.75rem;
+  color: #fca5a5;
+  font-weight: 700;
+}
+
+.beacons-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.beacon-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.beacon-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.beacon-card.selected {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.beacon-name {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.beacon-freq {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #38bdf8;
+}
+
+.beacon-test-math {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.beacon-sel-btn {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.beacon-card.selected .beacon-sel-btn {
+  color: #38bdf8;
+}
+
+.channel-solver-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.channel-solver-lbl {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* ─── SHARED INVESTIGATION CARDS & CONTROLS ───────────────────────────────── */
+.station-interactive-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.investigation-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px 18px;
+  transition: all 0.25s ease;
+}
+
+.investigation-card.is-active {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.investigation-card.is-complete {
+  border-color: rgba(16, 229, 165, 0.35);
+  background: rgba(16, 229, 165, 0.05);
+}
+
+.inv-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.inv-step-num {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.2);
+  border: 1.5px solid #38bdf8;
+  color: #38bdf8;
+  font-weight: 900;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.is-complete .inv-step-num {
+  background: #10e5a5;
+  border-color: #10e5a5;
+  color: #042f2e;
+}
+
+.inv-title-wrap {
+  flex: 1;
+}
+
+.inv-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.inv-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+.inv-check-badge {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #10e5a5;
+  letter-spacing: 0.04em;
+  background: rgba(16, 229, 165, 0.15);
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 229, 165, 0.3);
+}
+
+.inv-action-row {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.inv-success-pill {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(16, 229, 165, 0.12);
+  border: 1px solid rgba(16, 229, 165, 0.3);
+  font-size: 0.82rem;
+  color: #a7f3d0;
+}
+
+.inv-success-pill.celebration {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fde68a;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Inputs & Buttons */
+.flex-input-grp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.telemetry-input {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.telemetry-input.large {
+  font-size: 1rem;
+  padding: 10px 14px;
+  min-width: 200px;
+}
+
+.telemetry-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+.btn-action-primary {
+  background: #38bdf8;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-primary:hover:not(:disabled) {
+  background: #7dd3fc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35);
+}
+
+.btn-action-primary.glow {
+  background: #10e5a5;
+  color: #022c22;
+  box-shadow: 0 0 14px rgba(16, 229, 165, 0.4);
+}
+
+.btn-action-primary.glow:hover {
+  background: #34d399;
+}
+
+.btn-action-warning {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1.5px solid #f59e0b;
+  color: #fbbf24;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-warning:hover {
+  background: rgba(245, 158, 11, 0.25);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-subtle {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+}
+
+.btn-subtle:hover {
+  color: #94a3b8;
+}
+
+/* Feedback alerts */
+.station-feedback-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  animation: fadeIn 0.2s ease;
+}
+
+.alert-success {
+  background: rgba(16, 229, 165, 0.15);
+  border: 1.5px solid #10e5a5;
+  color: #a7f3d0;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1.5px solid #ef4444;
+  color: #fca5a5;
+}
+
+.station-sub-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* Formula Composer (Station C) */
+.formula-composer-box {
+  display: flex;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.tuner-preview {
-  font-family: var(--font-display);
+.composer-lead {
+  font-size: 1.1rem;
   font-weight: 900;
-  font-size: clamp(1.15rem, 1.5vw, 1.5rem);
-  text-align: center;
-  color: #ffffff;
-  padding-top: 4px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: #38bdf8;
 }
 
-.tuner-preview .coeff { color: var(--green); }
-.tuner-preview .const { color: var(--purple-light); }
+.composer-var {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #ffffff;
+}
 
-/* ─── Station C: Expedition Log table ───────────────────────────────────── */
-.log-table {
+.composer-input {
+  width: 55px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid #38bdf8;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 6px;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Tuner Sliders (Station B) */
+.tuner-manifold-box {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 12px;
 }
 
-.log-row {
+.tuner-sliders-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  align-items: center;
-  background: rgba(30, 25, 70, 0.7);
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  border-radius: 8px;
-  padding: 5px 10px;
+  gap: 16px;
 }
 
-.log-cell {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: #ffffff;
-}
-
-.log-input {
-  width: 100%;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: #ffffff;
-  text-align: center;
-}
-
-.log-input:focus {
-  outline: none;
-  border-color: var(--gold);
-}
-
-.log-input.correct-input {
-  border-color: var(--green);
-  background: rgba(76, 175, 80, 0.18);
-}
-
-.log-input.wrong-input {
-  border-color: var(--red);
-  background: rgba(239, 83, 80, 0.18);
-}
-
-/* ─── Station D: Spot the False Marker ──────────────────────────────────── */
-.spot-steps-list {
+.tuner-col {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 4px;
 }
 
-.spot-step-card {
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-family: var(--font-display);
-  font-size: 0.98rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: var(--transition-fast, 0.18s ease);
-  border: 2px solid rgba(255, 255, 255, 0.22);
-  background: rgba(30, 25, 70, 0.85);
+.tuner-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.tuner-val-bold {
   color: #ffffff;
-  min-height: 40px;
+  font-weight: 800;
+}
+
+.tuner-val-bold.highlight-correct {
+  color: #10e5a5;
+}
+
+.slider-range {
+  width: 100%;
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+
+.slider-hint {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.formula-eval-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  gap: 6px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.spot-step-card:hover:not(.selected-error) {
-  border-color: #fbbf24;
-  transform: translateY(-1px);
-  background: rgba(251, 191, 36, 0.2);
-}
-
-.spot-step-card.selected-error {
-  background: rgba(34, 197, 94, 0.35);
-  border-color: #4ade80;
-  box-shadow: 0 0 12px rgba(74, 222, 128, 0.45);
-}
-
-.spot-step-card.selected-correct-step {
-  border-color: #f87171;
-  background: rgba(239, 68, 68, 0.35);
-}
-
-/* ─── Running readout bar (reused across stations) ──────────────────────── */
-.running-ratio-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  background: rgba(12, 10, 32, 0.9);
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 8px;
   padding: 8px 12px;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.22);
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  flex-wrap: wrap;
 }
 
-.running-ratio-text {
-  font-family: var(--font-display);
-  font-size: clamp(0.95rem, 1.15vw, 1.18rem);
-  font-weight: 900;
-  color: #fcd34d;
-  line-height: 1.3;
+.eval-eq {
+  font-size: 0.8rem;
+  color: #cbd5e1;
 }
 
-.running-ratio-text.exact {
-  color: #4ade80;
-  text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
-}
-
-.running-ratio-text.over {
-  color: #f87171;
-  text-shadow: 0 0 10px rgba(248, 113, 113, 0.6);
-}
-
-/* ─── Guide / Help Cards ────────────────────────────────────────────────── */
-.station-guide-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px dashed rgba(255, 255, 255, 0.25);
-  border-radius: 12px;
-  padding: 8px 14px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.station-guide-text {
-  font-family: var(--font-body);
-  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
-  color: #f8fafc;
-  line-height: 1.45;
-  font-weight: 700;
-  margin: 0;
-}
-
-/* ─── Success / Completion Panel ────────────────────────────────────────── */
-.station-success {
-  background: rgba(18, 16, 52, 0.96);
-  border: 2px solid rgba(34, 197, 94, 0.7);
-  border-radius: 14px;
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.station-success .success-icon {
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.station-success-msg {
-  font-family: var(--font-body);
-  font-size: clamp(0.92rem, 1.08vw, 1.08rem);
-  color: #ffffff;
-  line-height: 1.35;
+.eval-status {
+  font-size: 0.75rem;
   font-weight: 800;
-  margin: 0;
 }
 
-.station-success-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
+.eval-ok { color: #10e5a5; }
+.eval-bad { color: #ef4444; }
+
+.solver-hint-math code {
+  font-size: 0.85rem;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 6px;
 }
 
-.station-success-actions button {
-  padding: 6px 16px;
-  font-size: clamp(0.9rem, 1vw, 1rem);
-  font-weight: 800;
-  min-height: 38px;
-  flex: 1 1 auto;
-}
-
-/* ─── Station Action Buttons Row ────────────────────────────────────────── */
-.station-actions {
-  display: flex;
-  gap: 6px;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: auto;
-  width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.station-actions button {
-  padding: 6px 14px;
-  min-height: 38px;
-  flex: 1 1 auto;
-  font-size: clamp(0.9rem, 1vw, 1rem);
-  font-weight: 800;
-  border-radius: 12px;
-}
-
-/* ─── Responsive Media Queries ──────────────────────────────────────────── */
+/* ─── Responsive Media Queries ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .station-wrap {
-    padding: 4px 6px;
-    gap: 4px;
-  }
-  .station-grid-2col {
+  .hydro-sim-viewport,
+  .solar-matrix-viewport,
+  .radar-sim-viewport {
     grid-template-columns: 1fr;
-    gap: 6px;
-    overflow-y: auto;
   }
-  .station-actions button,
-  .station-success-actions button {
-    min-height: 34px;
-    padding: 4px 10px;
-    font-size: 0.86rem;
+  .bridge-telemetry-panel {
+    grid-template-columns: 1fr;
   }
-  .log-row {
-    grid-template-columns: 1fr 1fr;
+  .tuner-sliders-grid {
+    grid-template-columns: 1fr;
+  }
+  .beacons-choice-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -26,29 +26,26 @@ export function wonderNarration() {
 export function storyNarration(panel) {
   const scripts = [
     [
-      say("Farhan and Mei Lin met Tally the Owl at the start of a long mountain trail."),
-      say("Numbered posts marked the way — three... seven... eleven... fifteen — but the trail curved off into the mist, and half the markers ahead were missing."),
-      think("We need to reach marker fifty before sundown, said Mei Lin. We can't walk the whole trail counting every post."),
-      say("Tally the Owl tilted her head. Then don't count. Find the rule."),
+      say("Farhan, Mei Lin, and Chief Engineer Tally stood at the edge of the roaring Echo Gorge."),
+      say("An automated cantilever crane was assembling a modular steel truss bridge — 5 struts in the first bay, 9 in the second, 13 in the third, and 17 in the fourth."),
+      think("We have to span the full gorge before nightfall, said Farhan. Should we walk onto the beams and count every strut?"),
+      say("Tally tapped her tablet. Never count one by one. Find the constant rate of growth — the common difference. Once you have that, the computer can calculate the beams for any span instantly."),
     ],
     [
-      say("Farhan spotted it fast: each marker is four more than the last — three, then seven, then eleven."),
-      say("That's the term-to-term rule, Tally explained. It tells you what to do to get from one marker to the next."),
-      ask("But if I asked you for marker fifty, would you really add four, forty-nine times?"),
-      say("Mei Lin shook her head. There has to be a shortcut — a formula that works for any position at once."),
-      emphasize("Exactly, said Tally. That's the position-to-term rule — the general term."),
+      say("Down at the reservoir, water surged through a stepped penstock aqueduct powering the valley turbines."),
+      say("Pressure sensors along the checkpoints registered climbing PSI: 14 PSI at Station 1, 20 PSI at Station 2, 26 PSI at Station 3, and 32 PSI at Station 4."),
+      think("Farhan typed P equals 6n plus 14 into the valve controller. But Mei Lin checked Station 1: 6 times 1 plus 14 is 20 — but the sensor reads 14!"),
+      emphasize("The constant must be the zero-term: 14 minus 6 equals positive 8. The true general term is P equals 6n plus 8."),
     ],
     [
-      say("At the map table, Farhan scribbled fast: we add four each time, and we started at three — so the formula must be four times n, plus three!"),
-      say("Mei Lin frowned and checked it against marker one. Hold on. Put n equals one into your formula: four times one, plus three, is seven — but the very first marker was three, not seven."),
-      think("Farhan paused. The common difference gives you the four — the times-n part. But the plus-three isn't the common difference, it's whatever makes the formula land on marker one exactly."),
-      emphasize("Checking against n equals one caught the mistake before it went any further."),
+      say("At basecamp on the snowy plateau, emergency alarms sounded: a blizzard was inbound."),
+      say("To power the thermal defense shield, the automated 3D fabricator had to manufacture expanding hexagonal solar arrays: 6 panels in Tier 1, 11 in Tier 2, 16 in Tier 3, and 21 in Tier 4."),
+      emphasize("Mei Lin opened the engineering ledger: We need 241 kilowatts for Tier 48. Let's derive the algebraic formula T sub n equals 5n plus 1 to fabricate the exact solar grid."),
     ],
     [
-      say("With the corrected formula, the en-th term equals four times n, minus one, the trio put it to the test."),
-      say("Marker fifty, said Farhan, is four times fifty, minus one — one hundred and ninety-nine."),
-      say("Mei Lin checked it against the early markers one more time, and it matched every single one."),
-      cheer("Tally the Owl swooped ahead and landed right beside a weathered post reading one hundred and ninety-nine. The expedition can push on, she called back. You didn't need to count a single step past marker four."),
+      say("At the summit radar tower, an emergency radio beacon crackled through the blizzard static."),
+      say("The lost mountaineers' transponder transmitted strictly on an arithmetic channel frequency: f sub n equals 7n plus 15 megahertz."),
+      instruct("Tally issued the final directive: Use sequence membership testing! If 7n plus 15 equals f yields an exact positive whole number, it's a real distress signal. Audit the rival's false log, solve for n, and lock the rescue channel!"),
     ],
   ];
 
@@ -58,20 +55,20 @@ export function storyNarration(panel) {
 export function simStationIntro(stationIdx) {
   const intros = [
     [
-      instruct("Welcome to The Growing Trail — a Concept Discovery Lab!"),
-      instruct("Step the position forward and watch the trail pattern grow. Notice the constant amount added between each step — that's the common difference."),
+      instruct("Welcome to Station A: The Gorge Suspension Bridge Strut Lab!"),
+      instruct("Inspect the cantilever bridge expansion and observe the rate of increase. Find the common difference in steel struts and engineer the full gorge span!"),
     ],
     [
-      instruct("Welcome to Set the Checkpoint — a Build-to-Target Challenge!"),
-      instruct("Tune the coefficient and the constant until your formula, a times n plus b, lands exactly on the target value at the target position."),
+      instruct("Welcome to Station B: The Hydro-Pressure Aqueduct Governor!"),
+      instruct("Inspect the water pressure across descending checkpoints. Calibrate the rate and zero-term offset to prevent a pressure blowout at Station 35!"),
     ],
     [
-      instruct("Welcome to Build the Expedition Log — a Multi-Step Construction!"),
-      instruct("Fill in the position-to-term table for the growing figure, assemble the general term from the coefficient and constant, then apply it to a far stage."),
+      instruct("Welcome to Station C: The Solar Power Matrix Expedition!"),
+      instruct("Construct the engineering ledger table, synthesize the algebraic general term, and calculate the exact panel count needed for blizzard survival at Tier 48!"),
     ],
     [
-      instruct("Welcome to Spot the False Trail Marker — an Error Detective challenge!"),
-      instruct("A rival trekker's worked solution contains one mistake. Tap the line that's wrong, then supply the correction."),
+      instruct("Welcome to Station D: The Summit Radar Distress Lock!"),
+      instruct("Audit the rival's corrupted telemetry log and use sequence membership testing to identify the true emergency channel among atmospheric static!"),
     ],
   ];
 
