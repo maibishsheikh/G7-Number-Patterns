@@ -29,13 +29,16 @@ function StoryImage({ panel }) {
   return (
     <div className="story-image-container">
       {!imgError && imageSrc ? (
-        <img
-          key={panel.panel}
-          src={imageSrc}
-          alt={panel.title}
-          onError={() => setImgError(true)}
-          className="story-full-img"
-        />
+        <>
+          <img
+            key={panel.panel}
+            src={imageSrc}
+            alt={panel.title}
+            onError={() => setImgError(true)}
+            className="story-full-img"
+          />
+          <div className="story-image-overlay" />
+        </>
       ) : (
         <div className="story-img-fallback" style={{ background: panel.imageBg }}>
           <span className="fallback-emoji">{panel.imageEmoji}</span>
