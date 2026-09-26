@@ -23,7 +23,7 @@ const RADAR_SCENARIOS = [
       { id: 'bravo', label: 'Beacon Bravo', freq: 162, calc: '(162 − 15) ÷ 7 = 21 (Whole Number)', channelNum: 21, isReal: true },
       { id: 'charlie', label: 'Beacon Charlie', freq: 175, calc: '(175 − 15) ÷ 7 = 22.86 (Fraction)', isReal: false },
     ],
-    context: 'High-altitude radar listening for lost expedition climbers during zero-visibility whiteout',
+    context: 'High-altitude radar listening for lost expedition climbers in zero-visibility whiteout',
   },
   {
     id: 'weather_drone',
@@ -43,7 +43,7 @@ const RADAR_SCENARIOS = [
       { id: 'bravo', label: 'Drone Echo 2', freq: 161, calc: '(161 − 11) ÷ 6 = 25 (Whole Number)', channelNum: 25, isReal: true },
       { id: 'charlie', label: 'Drone Echo 3', freq: 170, calc: '(170 − 11) ÷ 6 = 26.5 (Fraction)', isReal: false },
     ],
-    context: 'Monitoring robotic atmospheric probes tracking summit wind shear and barometric drops',
+    context: 'Robotic atmospheric probes tracking summit wind shear and barometric drops',
   },
   {
     id: 'seismic_array',
@@ -70,6 +70,7 @@ const RADAR_SCENARIOS = [
 export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
   const { narrate, stopAll, sounds } = useAudio(audioEnabled);
   const [scenIdx, setScenIdx] = useState(0);
+  const [activeStep, setActiveStep] = useState(1); // 1 or 2
   const [selectedLogId, setSelectedLogId] = useState(null);
   const [correctLogInput, setCorrectLogInput] = useState('');
   const [logAuditDone, setLogAuditDone] = useState(false);
@@ -93,7 +94,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
       sounds.correct();
       setFeedback({
         type: 'ok',
-        text: `CORRUPTED ENTRY IDENTIFIED! Entry ${id} (${entry.freq} ${scen.unit}) violates common difference (+${scen.d} ${scen.unit}). Enter the correct frequency to repair the log!`,
+        text: `CORRUPTED ENTRY FOUND! Entry ${id} (${entry.freq} ${scen.unit}) violates common difference (+${scen.d} ${scen.unit}). Enter correct value to repair!`,
       });
       narrate([{
         text: `Corrupted entry identified! Enter the correct frequency to repair the transmission log.`,
@@ -103,7 +104,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
       sounds.wrong();
       setFeedback({
         type: 'err',
-        text: `Entry ${id} is mathematically correct (${entry.freq} ${scen.unit}). Check the difference between other consecutive entries.`,
+        text: `Entry ${id} is mathematically correct (${entry.freq} ${scen.unit}). Check consecutive differences.`,
       });
       narrate([{
         text: `That entry is valid. Check the difference between other consecutive entries.`,
@@ -118,9 +119,10 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
     if (val === corruptedItem.correctFreq) {
       sounds.correct();
       setLogAuditDone(true);
+      setActiveStep(2);
       setFeedback({
         type: 'ok',
-        text: `LOG REPAIRED! Entry ${corruptedItem.id} restored to ${corruptedItem.correctFreq} ${scen.unit}. Sequence now consistent with rule ${scen.formulaStr}!`,
+        text: `LOG REPAIRED! Entry ${corruptedItem.id} restored to ${corruptedItem.correctFreq} ${scen.unit}. Sequence consistent with ${scen.formulaStr}!`,
       });
       narrate([{
         text: `Log repaired! Telemetry restored. Now analyze the 3 incoming signals using sequence membership testing.`,
@@ -130,7 +132,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
       sounds.wrong();
       setFeedback({
         type: 'err',
-        text: `Incorrect repair value. Calculate: previous frequency + ${scen.d} = ?`,
+        text: `Incorrect repair value: previous frequency + ${scen.d} = ?`,
       });
       narrate([{
         text: `Add ${scen.d} to the previous channel frequency.`,
@@ -142,7 +144,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
   function handleLockBeacon() {
     stopAll();
     if (!selectedBeaconId) {
-      setFeedback({ type: 'err', text: 'Select an incoming beacon from the radar screen first!' });
+      setFeedback({ type: 'err', text: 'Select an incoming beacon from the options below!' });
       return;
     }
 
@@ -155,7 +157,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
       setRadarLocked(true);
       setFeedback({
         type: 'ok',
-        text: `HOMING LOCK ESTABLISHED! ${beacon.label} (${beacon.freq} ${scen.unit}) is confirmed on Channel ${realBeacon.channelNum}! Audio connection active: "Expedition rescued!"`,
+        text: `HOMING LOCK ESTABLISHED! ${beacon.label} (${beacon.freq} ${scen.unit}) is confirmed on Channel ${realBeacon.channelNum}! Rescue team dispatched!`,
       });
       narrate([{
         text: `Homing lock established! Channel ${realBeacon.channelNum} verified. Rescue team dispatched to the peak!`,
@@ -169,7 +171,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
       sounds.wrong();
       setFeedback({
         type: 'err',
-        text: `FALSE PULSE! For ${beacon.label}: (${beacon.freq} − ${scen.c}) ÷ ${scen.d} is not a whole number. It violates sequence membership!`,
+        text: `FALSE PULSE! (${beacon.freq} − ${scen.c}) ÷ ${scen.d} is not a whole number. It violates sequence membership!`,
       });
       narrate([{
         text: `That signal is atmospheric static. Channel number must be an exact positive whole number.`,
@@ -179,7 +181,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
       sounds.wrong();
       setFeedback({
         type: 'err',
-        text: `Correct beacon selected, but channel number is wrong. Solve: (${beacon.freq} − ${scen.c}) ÷ ${scen.d} = ?`,
+        text: `Correct beacon, but wrong channel n. Solve: (${beacon.freq} − ${scen.c}) ÷ ${scen.d} = ?`,
       });
       narrate([{
         text: `Subtract ${scen.c} from the frequency, then divide by ${scen.d} to find channel n.`,
@@ -191,6 +193,7 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
   function nextScenario() {
     stopAll();
     setScenIdx((s) => (s + 1) % RADAR_SCENARIOS.length);
+    setActiveStep(1);
     setSelectedLogId(null);
     setCorrectLogInput('');
     setLogAuditDone(false);
@@ -203,12 +206,11 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
 
   return (
     <div className="station-container">
-      {/* Station Header */}
+      {/* Compact Top Header */}
       <div className="station-top-header">
         <div className="station-badge-group">
-          <span className="station-pill-label">STATION D · SEQUENCE MEMBERSHIP & TELEMETRY AUDIT</span>
+          <span className="station-pill-label">STATION D · SEQUENCE MEMBERSHIP &amp; AUDITING</span>
           <h3 className="station-headline">📡 {scen.name}</h3>
-          <p className="station-subtext">{scen.context}</p>
         </div>
         <div className="station-metric-pill">
           <span className="metric-title">CARRIER FREQUENCY RULE</span>
@@ -216,172 +218,139 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
         </div>
       </div>
 
-      {/* Main Radar Screen & Incoming Signals Display */}
-      <div className="radar-sim-viewport">
-        {/* Phosphor Green Radar Screen */}
-        <div className="radar-screen-box">
-          <svg className="radar-svg" viewBox="0 0 200 200">
-            <defs>
-              <radialGradient id="radarSweepGrad">
-                <stop offset="0%" stopColor="#10e5a5" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#10e5a5" stopOpacity="0" />
-              </radialGradient>
-            </defs>
+      {/* Main 2-Column Body: Fits in 1 Screen with No Scroll */}
+      <div className="station-split-body">
+        {/* Left Column: Phosphor Radar Display */}
+        <div className="station-left-sim">
+          <div className="radar-screen-box">
+            <svg className="radar-svg" viewBox="0 0 190 190">
+              <defs>
+                <radialGradient id="radarSweepGradD">
+                  <stop offset="0%" stopColor="#10e5a5" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#10e5a5" stopOpacity="0" />
+                </radialGradient>
+              </defs>
 
-            {/* Radar Scope Rings */}
-            <circle cx="100" cy="100" r="90" fill="#031510" stroke="#059669" strokeWidth="1.5" />
-            <circle cx="100" cy="100" r="68" fill="none" stroke="#047857" strokeWidth="1" strokeDasharray="3 3" />
-            <circle cx="100" cy="100" r="45" fill="none" stroke="#047857" strokeWidth="1" strokeDasharray="3 3" />
-            <circle cx="100" cy="100" r="22" fill="none" stroke="#047857" strokeWidth="1" strokeDasharray="3 3" />
-            <line x1="100" y1="10" x2="100" y2="190" stroke="#047857" strokeWidth="0.8" opacity="0.6" />
-            <line x1="10" y1="100" x2="190" y2="100" stroke="#047857" strokeWidth="0.8" opacity="0.6" />
+              <circle cx="95" cy="95" r="85" fill="#031510" stroke="#059669" strokeWidth="1.5" />
+              <circle cx="95" cy="95" r="64" fill="none" stroke="#047857" strokeWidth="1" strokeDasharray="3 3" />
+              <circle cx="95" cy="95" r="42" fill="none" stroke="#047857" strokeWidth="1" strokeDasharray="3 3" />
+              <circle cx="95" cy="95" r="21" fill="none" stroke="#047857" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="95" y1="10" x2="95" y2="180" stroke="#047857" strokeWidth="0.8" opacity="0.6" />
+              <line x1="10" y1="95" x2="180" y2="95" stroke="#047857" strokeWidth="0.8" opacity="0.6" />
 
-            {/* Rotating Radar Sweep Line */}
-            <g className="radar-rotating-beam">
-              <line x1="100" y1="100" x2="190" y2="100" stroke="#10e5a5" strokeWidth="2" />
-              <path d="M 100 100 L 190 100 A 90 90 0 0 0 163 36 Z" fill="url(#radarSweepGrad)" />
-            </g>
+              <g className="radar-rotating-beam">
+                <line x1="95" y1="95" x2="180" y2="95" stroke="#10e5a5" strokeWidth="2" />
+                <path d="M 95 95 L 180 95 A 85 85 0 0 0 155 35 Z" fill="url(#radarSweepGradD)" />
+              </g>
 
-            {/* Radar Target Blips */}
-            {scen.beacons.map((b, idx) => {
-              const angles = [45, 140, 290];
-              const radii = [60, 75, 50];
-              const rad = (angles[idx] * Math.PI) / 180;
-              const bx = 100 + radii[idx] * Math.cos(rad);
-              const by = 100 + radii[idx] * Math.sin(rad);
-              const isSelected = selectedBeaconId === b.id;
+              {scen.beacons.map((b, idx) => {
+                const angles = [45, 140, 290];
+                const radii = [55, 68, 45];
+                const rad = (angles[idx] * Math.PI) / 180;
+                const bx = 95 + radii[idx] * Math.cos(rad);
+                const by = 95 + radii[idx] * Math.sin(rad);
+                const isSelected = selectedBeaconId === b.id;
 
-              return (
-                <g key={b.id} className="radar-blip-group" onClick={() => logAuditDone && setSelectedBeaconId(b.id)}>
-                  <circle
-                    cx={bx}
-                    cy={by}
-                    r={isSelected ? 6 : 4}
-                    fill={radarLocked && b.isReal ? '#f59e0b' : isSelected ? '#38bdf8' : '#10e5a5'}
-                    className="blip-pulse"
-                  />
-                  {isSelected && (
-                    <circle cx={bx} cy={by} r="10" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="2 2" />
-                  )}
-                  <text x={bx} y={by - 8} fill="#f8fafc" fontSize="7" textAnchor="middle" fontWeight="bold">
-                    {b.freq} {scen.unit}
-                  </text>
-                </g>
-              );
-            })}
-
-            {/* Center Observatory Icon */}
-            <circle cx="100" cy="100" r="3" fill="#f8fafc" />
-          </svg>
-        </div>
-
-        {/* Telemetry Log Audit Console */}
-        <div className="radar-telemetry-console">
-          <div className="console-header">
-            <span className="console-title">📜 SURVEYOR TELEMETRY LOG AUDIT</span>
-            <span className="console-formula-tag">Rule: {scen.formulaStr}</span>
-          </div>
-
-          <p className="console-prompt">
-            {!logAuditDone
-              ? 'Tap the line that contains a mathematical error in the common difference:'
-              : '✅ Telemetry log repaired! All channels verified.'}
-          </p>
-
-          <div className="log-entries-list">
-            {scen.logEntries.map((entry) => {
-              const isSelected = selectedLogId === entry.id;
-              const isRepaired = logAuditDone && entry.isCorrupted;
-
-              return (
-                <div
-                  key={entry.id}
-                  className={`log-row-item ${isSelected ? (entry.isCorrupted ? 'row-corrupted' : 'row-nominal') : ''} ${isRepaired ? 'row-repaired' : ''}`}
-                  onClick={() => handleSelectLogEntry(entry.id)}
-                >
-                  <span className="log-col-ch">Channel {entry.channel}</span>
-                  <span className="log-col-freq">
-                    {isRepaired ? (
-                      <strong className="repaired-freq">{entry.correctFreq} {scen.unit} (Fixed)</strong>
-                    ) : (
-                      `${entry.freq} ${scen.unit}`
+                return (
+                  <g key={b.id} className="radar-blip-group" onClick={() => logAuditDone && setSelectedBeaconId(b.id)}>
+                    <circle
+                      cx={bx}
+                      cy={by}
+                      r={isSelected ? 5.5 : 3.5}
+                      fill={radarLocked && b.isReal ? '#f59e0b' : isSelected ? '#38bdf8' : '#10e5a5'}
+                      className="blip-pulse"
+                    />
+                    {isSelected && (
+                      <circle cx={bx} cy={by} r="9" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="2 2" />
                     )}
-                  </span>
-                  <span className="log-col-status">
-                    {isRepaired
-                      ? '✅ Restored'
-                      : isSelected
-                      ? entry.isCorrupted
-                        ? '⚠️ CORRUPTED'
-                        : '✓ Nominal'
-                      : 'Audit Line'}
-                  </span>
+                    <text x={bx} y={by - 7} fill="#f8fafc" fontSize="7" textAnchor="middle" fontWeight="bold">
+                      {b.freq} {scen.unit}
+                    </text>
+                  </g>
+                );
+              })}
+
+              <circle cx="95" cy="95" r="3" fill="#f8fafc" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Right Column: Guided Active Investigation */}
+        <div className="station-right-guided">
+          {/* Step Switcher */}
+          <div className="guided-step-tabs">
+            <button
+              className={`step-tab-btn ${activeStep === 1 ? 'active' : ''} ${logAuditDone ? 'done' : ''}`}
+              onClick={() => setActiveStep(1)}
+            >
+              {logAuditDone ? '✓' : '1'} Audit Log
+            </button>
+            <button
+              className={`step-tab-btn ${activeStep === 2 ? 'active' : ''} ${success ? 'done' : ''}`}
+              onClick={() => logAuditDone && setActiveStep(2)}
+              disabled={!logAuditDone}
+            >
+              {success ? '✓' : '2'} Rescue Channel Lock
+            </button>
+          </div>
+
+          {/* Active Step Content */}
+          <div className="active-investigation-box">
+            {activeStep === 1 && (
+              <div className="step-pane">
+                <h4 className="step-pane-title">1. Audit Surveyor Transmission Log</h4>
+                <p className="step-pane-desc">Tap the corrupted entry violating common difference (+{scen.d} {scen.unit}):</p>
+                <div className="log-entries-list compact">
+                  {scen.logEntries.map((entry) => {
+                    const isSelected = selectedLogId === entry.id;
+                    const isRepaired = logAuditDone && entry.isCorrupted;
+                    return (
+                      <div
+                        key={entry.id}
+                        className={`log-row-item ${isSelected ? (entry.isCorrupted ? 'row-corrupted' : 'row-nominal') : ''} ${isRepaired ? 'row-repaired' : ''}`}
+                        onClick={() => handleSelectLogEntry(entry.id)}
+                      >
+                        <span className="log-col-ch">Ch {entry.channel}</span>
+                        <span className="log-col-freq">
+                          {isRepaired ? `${entry.correctFreq} ${scen.unit} (Fixed)` : `${entry.freq} ${scen.unit}`}
+                        </span>
+                        <span className="log-col-status">
+                          {isRepaired ? '✅ OK' : isSelected ? (entry.isCorrupted ? '⚠️ CORRUPTED' : '✓ OK') : 'Tap'}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Repair Input Form when corrupted item is selected */}
-          {selectedLogId === corruptedItem.id && !logAuditDone && (
-            <div className="repair-input-box">
-              <span className="repair-lbl">
-                Correct frequency for Channel {corruptedItem.channel} ({scen.d} × {corruptedItem.channel} + {scen.c}):
-              </span>
-              <div className="flex-input-grp">
-                <input
-                  type="number"
-                  className="telemetry-input"
-                  placeholder="Correct frequency..."
-                  value={correctLogInput}
-                  onChange={(e) => setCorrectLogInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleRepairLog()}
-                />
-                <button className="btn-action-primary" onClick={handleRepairLog}>
-                  Repair Log
-                </button>
+                {selectedLogId === corruptedItem.id && !logAuditDone && (
+                  <div className="repair-input-box">
+                    <span className="repair-lbl">
+                      Correct Ch {corruptedItem.channel} ({scen.d} × {corruptedItem.channel} + {scen.c}):
+                    </span>
+                    <div className="flex-input-grp">
+                      <input
+                        type="number"
+                        className="telemetry-input"
+                        placeholder="Correct frequency..."
+                        value={correctLogInput}
+                        onChange={(e) => setCorrectLogInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleRepairLog()}
+                      />
+                      <button className="btn-action-primary" onClick={handleRepairLog}>
+                        Repair Log
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            )}
 
-      {/* Guided Engineering Investigation Controls */}
-      <div className="station-interactive-phases">
-        {/* Step 1: Telemetry Log Status */}
-        <div className={`investigation-card ${logAuditDone ? 'is-complete' : 'is-active'}`}>
-          <div className="inv-header">
-            <span className="inv-step-num">1</span>
-            <div className="inv-title-wrap">
-              <h4 className="inv-title">Audit Transmission Log & Fix Step Error</h4>
-              <p className="inv-desc">Identify the corrupted line violating the common difference of +{scen.d} {scen.unit}.</p>
-            </div>
-            {logAuditDone && <span className="inv-check-badge">✅ LOG REPAIRED</span>}
-          </div>
-          {logAuditDone && (
-            <div className="inv-success-pill">
-              <span>Telemetry restored! Channel {corruptedItem.channel} corrected to <strong>{corruptedItem.correctFreq} {scen.unit}</strong>.</span>
-            </div>
-          )}
-        </div>
+            {activeStep === 2 && (
+              <div className="step-pane">
+                <h4 className="step-pane-title">2. Sequence Membership: Lock Emergency Channel</h4>
+                <p className="step-pane-desc">Which incoming beacon yields an integer channel n in ({scen.d}n + {scen.c} = f)?</p>
 
-        {/* Step 2: Sequence Membership Emergency Lock */}
-        {logAuditDone && (
-          <div className={`investigation-card ${success ? 'is-complete' : 'is-active'}`}>
-            <div className="inv-header">
-              <span className="inv-step-num">2</span>
-              <div className="inv-title-wrap">
-                <h4 className="inv-title">Sequence Membership Test: Lock Real Emergency Beacon</h4>
-                <p className="inv-desc">
-                  To be an authentic beacon, solving <strong>{scen.d}n + {scen.c} = frequency</strong> must yield an exact <strong>positive whole number n</strong>!
-                </p>
-              </div>
-              {success && <span className="inv-check-badge">🏆 RESCUE CHANNEL SECURED</span>}
-            </div>
-
-            {!success ? (
-              <div className="membership-test-box">
-                {/* 3 Beacon Candidate Cards */}
-                <div className="beacons-choice-grid">
+                <div className="beacons-choice-grid compact">
                   {scen.beacons.map((b) => {
                     const isSelected = selectedBeaconId === b.id;
                     return (
@@ -392,20 +361,16 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
                       >
                         <span className="beacon-name">{b.label}</span>
                         <span className="beacon-freq">{b.freq} {scen.unit}</span>
-                        <div className="beacon-test-math">
-                          <code>({b.freq} − {scen.c}) ÷ {scen.d} = ?</code>
-                        </div>
-                        <span className="beacon-sel-btn">{isSelected ? 'Selected' : 'Test This Signal'}</span>
+                        <span className="beacon-sel-btn">{isSelected ? 'Selected ✓' : 'Select'}</span>
                       </div>
                     );
                   })}
                 </div>
 
-                {/* Solving input when beacon is selected */}
                 {selectedBeaconId && (
                   <div className="channel-solver-row">
                     <span className="channel-solver-lbl">
-                      Channel Number n for {scen.beacons.find((b) => b.id === selectedBeaconId)?.label}:
+                      Channel n = ({scen.beacons.find((b) => b.id === selectedBeaconId)?.freq} − {scen.c}) ÷ {scen.d}:
                     </span>
                     <div className="flex-input-grp">
                       <input
@@ -415,35 +380,32 @@ export default function SpotTheFalseMarker({ onComplete, audioEnabled }) {
                         value={channelInput}
                         onChange={(e) => setChannelInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleLockBeacon()}
+                        disabled={success}
                       />
-                      <button className="btn-action-primary glow" onClick={handleLockBeacon}>
-                        📡 Lock Rescue Frequency
+                      <button className="btn-action-primary glow" onClick={handleLockBeacon} disabled={success}>
+                        {success ? 'Locked 🏆' : 'Lock Frequency 📡'}
                       </button>
                     </div>
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="inv-success-pill celebration">
-                <span>📡 Beacon Bravo locked at Channel {realBeacon.channelNum}! Sequence membership verified (n = 21 is a positive integer). Rescue team dispatched!</span>
+            )}
+
+            {/* Instant Feedback Alert */}
+            {feedback && (
+              <div className={`station-feedback-alert ${feedback.type === 'ok' ? 'alert-success' : 'alert-error'}`}>
+                <span className="alert-icon">{feedback.type === 'ok' ? '✨' : '⚠️'}</span>
+                <span className="alert-msg">{feedback.text}</span>
               </div>
             )}
           </div>
-        )}
 
-        {/* Live Feedback Alert */}
-        {feedback && (
-          <div className={`station-feedback-alert ${feedback.type === 'ok' ? 'alert-success' : 'alert-error'}`}>
-            <span className="alert-icon">{feedback.type === 'ok' ? '✨' : '⚠️'}</span>
-            <span className="alert-msg">{feedback.text}</span>
+          {/* Scenario Switcher */}
+          <div className="station-sub-actions">
+            <button className="btn-subtle" onClick={nextScenario}>
+              🔄 Switch Radar Frequency ({scen.name})
+            </button>
           </div>
-        )}
-
-        {/* Scenario Switcher */}
-        <div className="station-sub-actions">
-          <button className="btn-subtle" onClick={nextScenario}>
-            🔄 Switch Radar Frequency ({scen.name})
-          </button>
         </div>
       </div>
     </div>
