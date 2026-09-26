@@ -108,33 +108,176 @@
   flex-direction: column;
 }
 
-/* Map Screen */
+/* Map Screen — Sleek Dark Glassmorphism matching reference screenshot */
 .play-map-wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 16px 20px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .play-map-card {
   width: 100%;
-  max-width: 900px;
-  padding: 24px;
+  max-width: 1040px;
+  background: rgba(13, 17, 36, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  padding: 24px 34px 28px 34px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
   box-sizing: border-box;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: cardScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.play-map-title {
-  color: var(--gold);
-  font-weight: 900;
+@keyframes cardScaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.worlds-accent-line {
+  width: 50px;
+  height: 4.5px;
+  background: #00f2a9;
+  border-radius: 999px;
+  margin: 0 auto 16px auto;
+  box-shadow: 0 0 12px rgba(0, 242, 169, 0.8);
+}
+
+.worlds-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.worlds-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.worlds-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #00f2a9;
   margin: 0;
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 20px rgba(0, 242, 169, 0.35);
+}
+
+.worlds-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #8fa0b5;
+  margin: 0;
+}
+
+.worlds-star-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(26, 32, 58, 0.75);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 999px;
+  padding: 6px 16px;
+  color: #fbbf24;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+.star-glyph {
+  color: #fbbf24;
+  font-size: 1.05rem;
+}
+
+.worlds-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.btn-boss-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(34, 28, 20, 0.75);
+  border: 1.5px solid rgba(254, 202, 87, 0.65);
+  color: #feca57;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 10px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.btn-boss-pill:hover {
+  background: rgba(254, 202, 87, 0.2);
+  border-color: #feca57;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(254, 202, 87, 0.35);
+}
+
+.btn-reflect-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(28, 36, 62, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 10px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.btn-reflect-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .play-map-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+  .worlds-header-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .worlds-header-left {
+    align-items: center;
+    text-align: center;
+  }
 }
 
 /* Done Screen */

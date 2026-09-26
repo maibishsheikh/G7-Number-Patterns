@@ -2,7 +2,26 @@
 import React, { useMemo } from 'react';
 import './FloatingNumbers.css';
 
-const TRAIL_SYMBOLS = ['🧭', '🚩', '⛰️', '🗺️', '🌲', '🦉', '⛺', '🪜', '📍', '✨', '🔺', '🔢', '⭐', '🪨', 'n', '+', '×', '=', '🥾', '🏔️'];
+const TRAIL_SYMBOLS = [
+  '3, 7, 11…',
+  'T_n = 4n − 1',
+  'a + (n − 1)d',
+  'd = +4',
+  'n²',
+  '2n + 1',
+  'T₅₀ = 199',
+  '5n − 2',
+  'Δ = 5',
+  'n³',
+  'P_n = 6n + 8',
+  'f_n = 7n + 15',
+  'T_n = dn + c',
+  'B_n = 4n + 1',
+  'n = 21',
+  '2, 5, 8, 11…',
+  'T₁ = 14',
+  'Δ = +6',
+];
 
 export default function FloatingNumbers() {
   const items = useMemo(() => {

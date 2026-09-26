@@ -1,133 +1,175 @@
 /* src/components/gamification/KingdomMap.css */
-.kingdom-grid {
+.worlds-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
+  gap: 12px;
   width: 100%;
-  max-width: 900px;
-  margin: 14px auto;
   box-sizing: border-box;
 }
 
-.kingdom-district-card {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1.5px solid rgba(255, 255, 255, 0.16);
-  border-radius: 16px;
-  padding: 14px 10px;
+.world-card {
+  background: rgba(18, 25, 48, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 10px;
+  height: 138px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   text-align: center;
-  gap: 8px;
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
 }
 
-.kingdom-district-card:hover:not(.locked) {
+.world-card:hover:not(.locked) {
   transform: translateY(-3px);
-  border-color: var(--gold);
-  background: rgba(255, 179, 0, 0.18);
-  box-shadow: 0 8px 20px rgba(255, 179, 0, 0.35);
+  border-color: rgba(0, 242, 169, 0.7);
+  box-shadow: 0 10px 24px rgba(0, 242, 169, 0.2);
+  background: rgba(22, 32, 60, 0.9);
 }
 
-.kingdom-district-card.current {
-  border-color: var(--gold);
-  background: rgba(255, 179, 0, 0.22);
-  box-shadow: 0 0 16px rgba(255, 179, 0, 0.5);
+.world-card.active {
+  border: 1.5px solid #00f2a9;
+  background: rgba(16, 28, 52, 0.9);
+  box-shadow: 0 0 16px rgba(0, 242, 169, 0.35), inset 0 0 12px rgba(0, 242, 169, 0.06);
 }
 
-.kingdom-district-card.completed {
-  border-color: rgba(34, 197, 94, 0.5);
-  background: rgba(34, 197, 94, 0.12);
+.world-card.completed {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(20, 32, 54, 0.8);
 }
 
-.kingdom-district-card.locked {
-  opacity: 0.45;
+.world-card.locked {
+  opacity: 0.55;
   cursor: not-allowed;
-  filter: grayscale(0.5);
+  filter: grayscale(0.2);
+  background: rgba(15, 20, 38, 0.6);
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
-.district-icon-wrap {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+.world-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 2px;
+  box-sizing: border-box;
+}
+
+.world-num-badge {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #cbd5e1;
+  letter-spacing: 0.02em;
+}
+
+.world-q-range {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.02em;
+}
+
+.world-card-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-}
-
-.district-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
+  height: 46px;
   width: 100%;
 }
 
-.district-num {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: var(--text-muted);
-  text-transform: uppercase;
+.world-target-ring-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: targetPulse 2s infinite ease-in-out;
 }
 
-.district-name {
+@keyframes targetPulse {
+  0% { transform: scale(0.96); opacity: 0.9; }
+  50% { transform: scale(1.04); opacity: 1; filter: drop-shadow(0 0 6px #00f2a9); }
+  100% { transform: scale(0.96); opacity: 0.9; }
+}
+
+.world-lock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.35));
+}
+
+.world-emoji-glyph {
+  font-size: 1.6rem;
+}
+
+.world-completed-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.world-card-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.world-name-title {
   font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 0.85rem;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  line-height: 1.2;
 }
 
-.district-score-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-}
-
-.district-score-fraction {
-  font-size: 0.85rem;
-  font-weight: 900;
-  color: #86efac;
-}
-
-.district-status {
-  font-size: 0.82rem;
+.world-play-action {
+  font-family: var(--font-display);
   font-weight: 800;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  color: #00f2a9;
+  letter-spacing: 0.02em;
 }
 
-.district-status.active-status {
-  color: var(--gold);
-  font-weight: 900;
+.world-replay-action {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.74rem;
+  color: #6ee7b7;
 }
 
-@media (max-width: 768px) {
-  .kingdom-grid {
+.world-locked-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .worlds-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 480px) {
-  .kingdom-grid {
+@media (max-width: 580px) {
+  .worlds-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
-  .kingdom-district-card {
+  .world-card {
+    height: 125px;
     padding: 10px 8px;
-  }
-  .district-icon-wrap {
-    width: 40px;
-    height: 40px;
-    font-size: 1.4rem;
   }
 }
